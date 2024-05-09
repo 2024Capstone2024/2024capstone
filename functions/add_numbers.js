@@ -1,23 +1,28 @@
-const { exec } = require('child_process');
+// functions/addNumbers.js
+
+const { spawn } = require('child_process');
 
 exports.handler = async (event, context) => {
   const { num1, num2 } = JSON.parse(event.body);
-  const result = await new Promise((resolve, reject) => {
-    exec(`python add_numbers.py ${num1} ${num2}`, (error, stdout, stderr) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-      if (stderr) {
-        reject(stderr);
-        return;
-      }
-      resolve(stdout.trim());
+
+  return new Promise((resolve, reject) => {
+    const pythonProcess = spawn('python', ['functions/add_numbers.py', num1.toString(), num2.toString()]);
+
+    let result = '';
+
+    pythonProcess.stdout.on('data', data => {
+      result += data.toString();
+    });
+
+    pythonProcess.stderr.on('data', data => {
+      reject(data.toString());
+    });
+
+    pythonProcess.on('close', () => {
+      resolve({
+        statusCode: 200,
+        body: result
+      });
     });
   });
-
-  return {
-    statusCode: 200,
-    body: result
-  };
 };
