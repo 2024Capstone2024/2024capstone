@@ -12,7 +12,38 @@ npm install netlify-cli -g
 
     <!-- Favicon -->
     <link href="img/favicon.ico" rel="icon">
+#test
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate</title>
+</head>
+<body>
+    <h1>Calculate</h1>
+    <input type="number" id="num1" placeholder="Enter number 1"><br>
+    <input type="number" id="num2" placeholder="Enter number 2"><br>
+    <button onclick="calculate()">Calculate</button>
+    <p id="result"></p>
 
+    <script>
+        function calculate() {
+            const num1 = document.getElementById('num1').value;
+            const num2 = document.getElementById('num2').value;
+
+            fetch('/.netlify/functions/calculate?num1=' + num1 + '&num2=' + num2)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('result').textContent = "Result: " + data;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
+#test
+    
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
