@@ -75,6 +75,22 @@
             document.getElementById('result').textContent = "Result: " + result;
         }
     </script>
+    <script>
+        async function sortNumbers() {
+            const response = await fetch('https://<your-site>.netlify.app/.netlify/functions/sortNumbers', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ numbers: [5, 3, 8, 1, 2] })
+            });
+
+            const data = await response.json();
+            console.log(data.sortedNumbers); // [1, 2, 3, 5, 8]
+        }
+
+        sortNumbers();
+    </script>
 </body>
 </html>
     
