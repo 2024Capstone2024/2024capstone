@@ -56,7 +56,7 @@
 
     <!-- 맵을 표시할 div 추가 -->
 
-    <!-- Calculate Section -->
+  <!-- Calculate Section -->
 <h1>Calculate</h1>
 <input type="number" id="num1" placeholder="Enter number 1"><br>
 <input type="number" id="num2" placeholder="Enter number 2"><br>
@@ -70,7 +70,7 @@
 
         // 서버로 요청 보내기
         try {
-            const response = await fetch(`https://2024capstone.netlify.app/.netlify/functions/calculate`, {  // YOUR_API_ENDPOINT_URL을 실제 서버 엔드포인트로 대체
+            const response = await fetch(`https://2024capstone.netlify.app/.netlify/functions/calculate?num1=${num1}&num2=${num2}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -90,6 +90,7 @@
         }
     }
 </script>
+
 
     
     <h1>API Test</h1>
