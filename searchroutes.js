@@ -1,54 +1,42 @@
-        var map = null;
-        var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+    const kakao = window.kakao;
+    kakao.maps.load(() => {
+      const mapContainer = document.getElementById('map'); // 지도를 표시할 div
+      const mapOption = {
+        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도 초기 중심 좌표 (서울)
+        level: 7 // 지도 확대 레벨
+      };
 
-        // 지도 초기화
-        function initMap() {
-            var mapContainer = document.getElementById('map');
-            var mapOptions = {
-                center: new kakao.maps.LatLng(37.566826, 126.9786567), // 초기 중심 좌표 (서울시청)
-                level: 3 // 초기 확대 레벨
-            };
-            map = new kakao.maps.Map(mapContainer, mapOptions);
-        }
+      // 지도 객체 생성
+      const map = new kakao.maps.Map(mapContainer, mapOption);
 
-        // 장소 검색 및 표시
-        function searchPlace() {
-            var keyword = document.getElementById('keyword').value;
-
-            // 백엔드 API 호출
-            axios.get('http://localhost:8080/api/searchPlace', {
-                params: {
-                    keyword: keyword
-                }
-            })
-            .then(response => {
-                var place = response.data;
-
-                // 장소 위치 정보
-                var placePosition = new kakao.maps.LatLng(place.y, place.x);
-
-                // 마커 생성
-                var marker = new kakao.maps.Marker({
-                    position: placePosition
-                });
-
-                // 마커를 지도에 표시
-                marker.setMap(map);
-
-                // 지도 중심을 선택한 장소 위치로 이동
-                map.setCenter(placePosition);
-
-                // 정보창에 장소 이름 표시
-                infowindow.setContent('<div style="padding:10px;">' + place.place_name + '</div>');
-                infowindow.open(map, marker);
-            })
-            .catch(error => {
-                console.error('Error fetching data from backend:', error);
-                alert('검색 결과를 가져오는 중 오류가 발생했습니다.');
-            });
-        }
-
-        // 페이지 로드 시 지도 초기화
-        document.addEventListener('DOMContentLoaded', function () {
-            initMap();
+      // 검색된 장소를 지도에 표시하는 함수
+      function showPlaceOnMap(place) {
+        const placePosition = new kakao.maps.LatLng(place.y, place.x); // 장소의 좌표
+        const marker = new kakao.maps.Marker({
+          position: placePosition,
+          map: map
         });
+
+        // 지도 중심을 검색된 장소 위치로 이동
+        map.setCenter(placePosition);
+      }
+
+      // 장소 검색 함수
+      function searchPlace() {
+        const keyword = document.getElementById('keyword').value;
+
+        // 백엔드 API로 요청을 보냄
+        $.ajax({
+          url: 'http://2024capstone-env.eba-uaztitgv.us-east-2.elasticbeanstalk.com/api/searchPlace',
+          method: 'GET',
+          data: { keyword: keyword },
+          success: function (response) {
+            showPlaceOnMap(response); // 검색 결과를 지도에 표시
+          },
+          error: function (error) {
+            console.error('Error searching place:', error);
+            alert('장소 검색에 실패했습니다.');
+          }
+        });
+      }
+    });
