@@ -705,6 +705,8 @@
     
     <script>
         const kakao = window.kakao;
+
+        // 카카오맵 API 초기화
         kakao.maps.load(() => {
             const mapContainer = document.getElementById('map'); // 지도를 표시할 div
             const mapOption = {
@@ -726,29 +728,29 @@
                 // 지도 중심을 검색된 장소 위치로 이동
                 map.setCenter(placePosition);
             }
-
-            // 장소 검색 함수
-            function searchPlace() {
-                const keyword = document.getElementById('keyword').value;
-
-                // 예시 URL로 설정 (본인의 백엔드 URL로 변경 필요)
-                const backendURL = 'http://2024capstone-env.eba-uaztitgv.us-east-2.elasticbeanstalk.com/api/searchPlace';
-
-                // jQuery를 이용한 백엔드 API 요청
-                $.ajax({
-                    url: backendURL,
-                    method: 'GET',
-                    data: { keyword: keyword },
-                    success: function (response) {
-                        showPlaceOnMap(response); // 검색 결과를 지도에 표시
-                    },
-                    error: function (error) {
-                        console.error('Error searching place:', error);
-                        alert('장소 검색에 실패했습니다.');
-                    }
-                });
-            }
         });
+
+        // 장소 검색 함수 (전역 함수로 빼냄)
+        function searchPlace() {
+            const keyword = document.getElementById('keyword').value;
+
+            // 예시 URL로 설정 (본인의 백엔드 URL로 변경 필요)
+            const backendURL = 'http://2024capstone-env.eba-uaztitgv.us-east-2.elasticbeanstalk.com/api/searchPlace';
+
+            // jQuery를 이용한 백엔드 API 요청
+            $.ajax({
+                url: backendURL,
+                method: 'GET',
+                data: { keyword: keyword },
+                success: function (response) {
+                    showPlaceOnMap(response); // 검색 결과를 지도에 표시
+                },
+                error: function (error) {
+                    console.error('Error searching place:', error);
+                    alert('장소 검색에 실패했습니다.');
+                }
+            });
+        }
     </script>
 
 </body>
