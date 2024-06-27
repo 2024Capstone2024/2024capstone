@@ -62,13 +62,9 @@
     
 
     <div>
-        <label for="startLocation">출발지:</label>
-        <input type="text" id="startLocation" placeholder="출발지를 입력하세요">
-        <br>
-        <label for="endLocation">도착지:</label>
-        <input type="text" id="endLocation" placeholder="도착지를 입력하세요">
-        <br>
-        <button onclick="searchRoutes()">경로 검색하기</button>
+        <label for="keyword">장소 검색:</label>
+        <input type="text" id="keyword" placeholder="검색어를 입력하세요">
+        <button onclick="searchPlace()">검색</button>
     </div>
     
     <div id="map"></div>
