@@ -1,71 +1,54 @@
+        var map = null;
+        var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
 
-        var map;
-        var geocoder = new kakao.maps.services.Geocoder();
-        var polyline;
-
-        // ���� �ʱ�ȭ
+        // 지도 초기화
         function initMap() {
             var mapContainer = document.getElementById('map');
             var mapOptions = {
-                center: new kakao.maps.LatLng(37.5665, 126.9780),
-                level: 5
+                center: new kakao.maps.LatLng(37.566826, 126.9786567), // 초기 중심 좌표 (서울시청)
+                level: 3 // 초기 확대 레벨
             };
-
             map = new kakao.maps.Map(mapContainer, mapOptions);
         }
 
-        initMap();
+        // 장소 검색 및 표시
+        function searchPlace() {
+            var keyword = document.getElementById('keyword').value;
 
-        // ��α׸���
-        function searchRoutes() {
-            var startAddress = document.getElementById('startLocation').value;
-            var endAddress = document.getElementById('endLocation').value;
-            var places = new kakao.maps.services.Places();
-
-
-            places.keywordSearch(startAddress, function(startResult, startStatus) {
-                if (startStatus === kakao.maps.services.Status.OK && startResult.length > 0) {
-                    var startCoords = new kakao.maps.LatLng(startResult[0].y, startResult[0].x);
-
-                    places.keywordSearch(endAddress, function(endResult, endStatus) {
-                        if (endStatus === kakao.maps.services.Status.OK && endResult.length > 0) {
-                            var endCoords = new kakao.maps.LatLng(endResult[0].y, endResult[0].x);
-
-                            deleteLines();
-
-                            polyline = new kakao.maps.Polyline({
-                                path: [startCoords, endCoords], 
-                                strokeWeight: 3,
-                                strokeColor: '#FF0000', 
-                                strokeOpacity: 0.7, 
-                                strokeStyle: 'solid' 
-                            });
-
-                            
-                            polyline.setMap(map);
-
-                            
-                            var bounds = new kakao.maps.LatLngBounds();
-                            bounds.extend(startCoords);
-                            bounds.extend(endCoords);
-                            map.setBounds(bounds);
-                        } else {
-                            alert('�������� ã�� �� �����ϴ�.');
-                        }
-                    });
-                } else {
-                    alert('������� ã�� �� �����ϴ�.');
+            // 백엔드 API 호출
+            axios.get('http://localhost:8080/api/searchPlace', {
+                params: {
+                    keyword: keyword
                 }
+            })
+            .then(response => {
+                var place = response.data;
+
+                // 장소 위치 정보
+                var placePosition = new kakao.maps.LatLng(place.y, place.x);
+
+                // 마커 생성
+                var marker = new kakao.maps.Marker({
+                    position: placePosition
+                });
+
+                // 마커를 지도에 표시
+                marker.setMap(map);
+
+                // 지도 중심을 선택한 장소 위치로 이동
+                map.setCenter(placePosition);
+
+                // 정보창에 장소 이름 표시
+                infowindow.setContent('<div style="padding:10px;">' + place.place_name + '</div>');
+                infowindow.open(map, marker);
+            })
+            .catch(error => {
+                console.error('Error fetching data from backend:', error);
+                alert('검색 결과를 가져오는 중 오류가 발생했습니다.');
             });
         }
 
-        
-        function deleteLines() {
-            
-            if (polyline) {
-                polyline.setMap(null);
-                polyline = null;
-            }
-        }
-
-        
+        // 페이지 로드 시 지도 초기화
+        document.addEventListener('DOMContentLoaded', function () {
+            initMap();
+        });

@@ -1,0 +1,2 @@
+/api/* http://Capstone2024-env.eba-dxm5trae.us-east-2.elasticbeanstalk.com/api/:splat 200
+/* /index.html 200
