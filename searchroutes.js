@@ -24,7 +24,7 @@ kakao.maps.load(() => {
 
   // 장소 검색 함수
   function searchPlace(keyword) {
-    fetch(`https://2024capstoneaiplanner.site/api/searchPlace?keyword=${encodeURIComponent(keyword)}`)
+    fetch(`https://2024capstone-env.eba-uaztitgv.us-east-2.elasticbeanstalk.com/api/searchPlace?keyword=${encodeURIComponent(keyword)}`)
       .then(response => response.json())
       .then(data => {
         showPlaceOnMap(data); // 검색 결과를 지도에 표시
