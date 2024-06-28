@@ -1,5 +1,6 @@
 // 카카오맵 API 초기화
 const kakao = window.kakao;
+
 kakao.maps.load(() => {
   const mapContainer = document.getElementById('map'); // 지도를 표시할 div
   const mapOption = {
@@ -23,19 +24,21 @@ kakao.maps.load(() => {
   }
 
   // 장소 검색 함수
-  function searchPlace() {
+  window.searchPlace = function() {
     const keyword = document.getElementById('keyword').value;
 
-    // Axios를 이용한 백엔드 API 요청
-    axios.get('http://Capstone2024-env.eba-dxm5trae.us-east-2.elasticbeanstalk.com/api/searchPlace', {
-      params: { keyword: keyword }
-    })
-    .then(response => {
-      showPlaceOnMap(response.data); // 검색 결과를 지도에 표시
-    })
-    .catch(error => {
-      console.error('Error searching place:', error);
-      alert('장소 검색에 실패했습니다.');
+    // 백엔드 API로 요청을 보냄
+    $.ajax({
+      url: 'https://2024capstone-env.eba-uaztitgv.us-east-2.elasticbeanstalk.com/api/searchPlace',
+      method: 'GET',
+      data: { keyword: keyword },
+      success: function (response) {
+        showPlaceOnMap(response); // 검색 결과를 지도에 표시
+      },
+      error: function (error) {
+        console.error('Error searching place:', error);
+        alert('장소 검색에 실패했습니다.');
+      }
     });
-  }
+  };
 });
