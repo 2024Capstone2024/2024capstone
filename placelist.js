@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Map container not found!');
         return;
       }
-      
+
       const mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567),
         level: 7
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const map = new kakao.maps.Map(mapContainer, mapOption);
   
       // 장소 검색 결과 목록에 표시할 목록 요소들
-      const placesList = document.getElementById('placesList');
+      const placesList = document.getElementById('placesList1');
   
       function displayPlaces(places) {
         placesList.innerHTML = '';
