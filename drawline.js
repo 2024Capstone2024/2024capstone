@@ -1,5 +1,5 @@
 // 카카오맵 API 초기화
-const kakao = window.kakao;
+
 kakao.maps.load(() => {
   const mapContainer1 = document.getElementById('map1'); // 지도를 표시할 div
   const mapOption = {
