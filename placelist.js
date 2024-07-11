@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const kakao = window.kakao;
     kakao.maps.load(() => {
       const mapContainer = document.getElementById('map3');
+
+      if (!mapContainer) {
+        console.error('Map container not found!');
+        return;
+      }
+      
       const mapOption = {
         center: new kakao.maps.LatLng(37.566826, 126.9786567),
         level: 7
