@@ -56,14 +56,9 @@
             height: 400px;
             margin-bottom: 20px;
         }
-        #placeList {
-            list-style-type: none;
-            padding: 0;
-             margin: 0;
-        }
-        #placeList li {
-            margin-bottom: 10px;
-        }
+        #map3 { width: 100%; height: 350px; }
+        #placesList { margin: 10px 0; padding: 0; list-style: none; }
+        #placesList li { margin: 5px 0; padding: 5px; border: 1px solid #ddd; cursor: pointer; }
     </style>
 </head>
 
@@ -106,8 +101,15 @@
     <div id="map2"></div>
     <script src="drawline.js" defer></script>
 
+    <h1>Kakao Map Place Search and List</h1>
+    <div>
+        <input type="text" id="keyword1" placeholder="Search for places">
+        <button id="listsearchBtn">Search</button>
+    </div>
+    <div id="map"></div>
+    <ul id="placesList"></ul>
+    <script src="placelist.js"></script>
 
-    
     <!-- Topbar Start -->
     <div class="container-fluid bg-dark px-5 d-none d-lg-block">
         <div class="row gx-0">
