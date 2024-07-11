@@ -62,17 +62,19 @@ window.kakao.maps.load(() => {
     // 경로 정보를 이용하여 지도에 선 그리기
     const path = routeData.map(point => new window.kakao.maps.LatLng(point.y, point.x));
 
-    // 지도2에 표시할 선 생성
-    const polyline = new window.kakao.maps.Polyline({
-      path: path,
-      strokeWeight: 4,
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.7,
-      strokeStyle: 'solid'
-    });
+    for (let i = 0; i < path.length - 1; i++) {
+      // 각 두 지점을 연결하는 선 생성
+      const polyline = new window.kakao.maps.Polyline({
+        path: [path[i], path[i + 1]],
+        strokeWeight: 4,
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.7,
+        strokeStyle: 'solid'
+      });
 
-    // 지도2에 선 표시
-    polyline.setMap(map2);
+      // 지도2에 선 표시
+      polyline.setMap(map2);
+    }
 
     // 첫 번째 장소로 지도2 중심 이동
     map2.setCenter(new window.kakao.maps.LatLng(path[0].getLat(), path[0].getLng()));
