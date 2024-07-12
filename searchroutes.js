@@ -9,32 +9,17 @@ kakao.maps.load(() => {
 
   // 지도 객체 생성
   const map = new kakao.maps.Map(mapContainer, mapOption);
-  
-  // 인포윈도우 객체 생성
-  const infowindow = new kakao.maps.InfoWindow({zIndex: 1});
 
   // 검색된 장소를 지도에 표시하는 함수
   function showPlaceOnMap(place) {
-    if (!place || !place.y || !place.x) {
-      console.error('Invalid place data:', place);
-      return;
-    }
-    
     const placePosition = new kakao.maps.LatLng(place.y, place.x); // 장소의 좌표
     const marker = new kakao.maps.Marker({
       position: placePosition,
       map: map
     });
 
-    // 지도 중심을 검색된 장소 위치로 이동 및 확대 레벨 설정
+    // 지도 중심을 검색된 장소 위치로 이동
     map.setCenter(placePosition);
-    map.setLevel(3); // 지도를 더 확대합니다
-
-    // 마커 클릭 시 인포윈도우 표시
-    kakao.maps.event.addListener(marker, 'click', () => {
-      infowindow.setContent(`<div style="padding:5px;font-size:12px;">${place.place_name}<br>${place.address_name}</div>`);
-      infowindow.open(map, marker);
-    });
   }
 
   // 장소 검색 함수
@@ -42,11 +27,7 @@ kakao.maps.load(() => {
     fetch(`https://www.2024capstoneaiplanner.site/api/searchPlace?keyword=${encodeURIComponent(keyword)}`)
       .then(response => response.json())
       .then(data => {
-        if (!Array.isArray(data) || data.length === 0) {
-          alert('장소를 찾을 수 없습니다.');
-          return;
-        }
-        showPlaceOnMap(data[0]); // 검색 결과의 첫 번째 장소를 지도에 표시
+        showPlaceOnMap(data); // 검색 결과를 지도에 표시
       })
       .catch(error => {
         console.error('Error searching place:', error);
