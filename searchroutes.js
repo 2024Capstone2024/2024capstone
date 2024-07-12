@@ -10,9 +10,6 @@ kakao.maps.load(() => {
   // 지도 객체 생성
   const map = new kakao.maps.Map(mapContainer, mapOption);
 
-  // 인포윈도우 객체 생성
-  const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
-
   // 검색된 장소를 지도에 표시하는 함수
   function showPlaceOnMap(place) {
     // place 데이터가 배열인지 확인
@@ -31,19 +28,7 @@ kakao.maps.load(() => {
 
     // 지도 중심을 검색된 장소 위치로 이동 및 확대 레벨 설정
     map.setCenter(placePosition);
-    map.setLevel(4); // 지도를 더 확대합니다
-
-    // 마커 클릭 시 인포윈도우 표시
-    kakao.maps.event.addListener(marker, 'click', () => {
-      infowindow.setContent(`
-        <div style="padding:5px;font-size:12px;">
-          <strong>${placeData.place_name}</strong><br>
-          ${placeData.address_name}<br>
-          <a href="${placeData.place_url}" target="_blank">자세히 보기</a>
-        </div>
-      `);
-      infowindow.open(map, marker);
-    });
+    map.setLevel(3); // 지도를 더 확대합니다
   }
 
   // 장소 검색 함수
@@ -67,4 +52,6 @@ kakao.maps.load(() => {
   const searchBtn = document.getElementById('searchBtn');
   searchBtn.addEventListener('click', () => {
     const keyword = document.getElementById('keyword').value;
-    searchPlace
+    searchPlace(keyword);
+  });
+});
