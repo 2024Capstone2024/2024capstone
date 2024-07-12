@@ -66,56 +66,56 @@ window.kakao.maps.load(() => {
   });
 
   // 지도에 경로를 선으로 표시하는 함수
-  function showRouteOnMap(routeData) {
-    // 경로 정보가 배열인지 확인
-    if (!Array.isArray(routeData) || routeData.length === 0) {
-      console.error('Invalid route data:', routeData);
-      alert('No route data available.');
-      return;
-    }
-
-    // 모든 마커를 지도에 추가하고 클릭 시 이벤트 추가
-    const bounds = new window.kakao.maps.LatLngBounds(); // 모든 마커를 포함할 범위 객체
-
-    // 경로 정보를 이용하여 지도에 선 그리기
-    const path = routeData.map(point => new window.kakao.maps.LatLng(point.y, point.x));
-
-    for (let i = 0; i < path.length; i++) {
-      // 각 경로 지점에 마커 생성
-      const marker = new window.kakao.maps.Marker({
-        position: path[i],
-        map: map2
-      });
-      markers.push(marker); // 마커 저장
-
-      // 클릭 시 인포윈도우 표시
-      const infowindow = new window.kakao.maps.InfoWindow({
-        content: `<div style="padding:5px;font-size:12px;">Point ${i + 1}<br>Lat: ${path[i].getLat()}<br>Lng: ${path[i].getLng()}</div>`
-      });
-
-      kakao.maps.event.addListener(marker, 'click', () => {
-        infowindow.open(map2, marker);
-      });
-
-      // 범위 객체에 마커 위치 추가
-      bounds.extend(path[i]);
-    }
-
-    // 경로를 지도에 선으로 표시
-    const polyline = new window.kakao.maps.Polyline({
-      path: path,
-      strokeWeight: 4,
-      strokeColor: '#FF0000',
-      strokeOpacity: 0.7,
-      strokeStyle: 'solid'
-    });
-    polyline.setMap(map2);
-
-    // 첫 번째 장소로 지도2 중심 이동 및 줌 레벨 설정
-    map2.setCenter(bounds.getCenter()); // 중심을 경로의 중앙으로 설정
-    map2.setLevel(6); // 경로가 잘 보이도록 줌 레벨 조정
-
-    // 모든 마커가 보이도록 자동으로 확대/축소
-    map2.setBounds(bounds);
+function showRouteOnMap(routeData) {
+  // 경로 정보가 배열인지 확인
+  if (!Array.isArray(routeData) || routeData.length === 0) {
+    console.error('Invalid route data:', routeData);
+    alert('No route data available.');
+    return;
   }
-});
+
+  // 모든 마커를 지도에 추가하고 클릭 시 이벤트 추가
+  const bounds = new window.kakao.maps.LatLngBounds(); // 모든 마커를 포함할 범위 객체
+
+  // 경로 정보를 이용하여 지도에 선 그리기
+  const path = routeData.map(point => new window.kakao.maps.LatLng(point.y, point.x));
+
+  for (let i = 0; i < path.length; i++) {
+    // 각 경로 지점에 마커 생성
+    const marker = new window.kakao.maps.Marker({
+      position: path[i],
+      map: map2
+    });
+    markers.push(marker); // 마커 저장
+
+    // 클릭 시 인포윈도우 표시
+    const infowindow = new window.kakao.maps.InfoWindow({
+      content: `<div style="padding:5px;font-size:12px;">Point ${i + 1}<br>Lat: ${path[i].getLat()}<br>Lng: ${path[i].getLng()}</div>`
+    });
+
+    kakao.maps.event.addListener(marker, 'click', () => {
+      infowindow.open(map2, marker);
+    });
+
+    // 범위 객체에 마커 위치 추가
+    bounds.extend(path[i]);
+  }
+
+  // 경로를 지도에 선으로 표시
+  const polyline = new window.kakao.maps.Polyline({
+    path: path,
+    strokeWeight: 4,
+    strokeColor: '#FF0000',
+    strokeOpacity: 0.7,
+    strokeStyle: 'solid'
+  });
+  polyline.setMap(map2);
+
+  // 첫 번째 장소로 지도2 중심 이동 및 줌 레벨 설정
+  map2.setCenter(bounds.getCenter()); // 중심을 경로의 중앙으로 설정
+  map2.setLevel(6); // 경로가 잘 보이도록 줌 레벨 조정
+
+  // 모든 마커가 보이도록 자동으로 확대/축소
+  map2.setBounds(bounds);
+}
+
