@@ -15,6 +15,11 @@ kakao.maps.load(() => {
 
   // 검색된 장소를 지도에 표시하는 함수
   function showPlaceOnMap(place) {
+    if (!place || !place.y || !place.x) {
+      console.error('Invalid place data:', place);
+      return;
+    }
+    
     const placePosition = new kakao.maps.LatLng(place.y, place.x); // 장소의 좌표
     const marker = new kakao.maps.Marker({
       position: placePosition,
@@ -37,7 +42,7 @@ kakao.maps.load(() => {
     fetch(`https://www.2024capstoneaiplanner.site/api/searchPlace?keyword=${encodeURIComponent(keyword)}`)
       .then(response => response.json())
       .then(data => {
-        if (data.length === 0) {
+        if (!Array.isArray(data) || data.length === 0) {
           alert('장소를 찾을 수 없습니다.');
           return;
         }
