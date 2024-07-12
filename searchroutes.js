@@ -15,7 +15,15 @@ kakao.maps.load(() => {
 
   // 검색된 장소를 지도에 표시하는 함수
   function showPlaceOnMap(place) {
-    const placePosition = new kakao.maps.LatLng(place.y, place.x); // 장소의 좌표
+    // place 데이터가 배열인지 확인
+    const placeData = Array.isArray(place) ? place[0] : place;
+
+    if (!placeData || !placeData.y || !placeData.x) {
+      console.error('Invalid place data:', place);
+      return;
+    }
+
+    const placePosition = new kakao.maps.LatLng(placeData.y, placeData.x); // 장소의 좌표
     const marker = new kakao.maps.Marker({
       position: placePosition,
       map: map
@@ -29,9 +37,9 @@ kakao.maps.load(() => {
     kakao.maps.event.addListener(marker, 'click', () => {
       infowindow.setContent(`
         <div style="padding:5px;font-size:12px;">
-          <strong>${place.place_name}</strong><br>
-          ${place.address_name}<br>
-          <a href="${place.place_url}" target="_blank">자세히 보기</a>
+          <strong>${placeData.place_name}</strong><br>
+          ${placeData.address_name}<br>
+          <a href="${placeData.place_url}" target="_blank">자세히 보기</a>
         </div>
       `);
       infowindow.open(map, marker);
@@ -43,11 +51,11 @@ kakao.maps.load(() => {
     fetch(`https://www.2024capstoneaiplanner.site/api/searchPlace?keyword=${encodeURIComponent(keyword)}`)
       .then(response => response.json())
       .then(data => {
-        if (data.length === 0) {
+        if (!data || (Array.isArray(data) && data.length === 0)) {
           alert('장소를 찾을 수 없습니다.');
           return;
         }
-        showPlaceOnMap(data[0]); // 검색 결과의 첫 번째 장소를 지도에 표시
+        showPlaceOnMap(data); // 검색 결과를 지도에 표시
       })
       .catch(error => {
         console.error('Error searching place:', error);
@@ -59,6 +67,4 @@ kakao.maps.load(() => {
   const searchBtn = document.getElementById('searchBtn');
   searchBtn.addEventListener('click', () => {
     const keyword = document.getElementById('keyword').value;
-    searchPlace(keyword);
-  });
-});
+    searchPlace
