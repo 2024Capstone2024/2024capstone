@@ -1,10 +1,9 @@
-// map.js
-
 document.addEventListener('DOMContentLoaded', () => {
   const kakao = window.kakao;
+
   kakao.maps.load(() => {
     const mapContainer = document.getElementById('map1');
-    
+
     if (!mapContainer) {
       console.error('Map container not found!');
       return;
@@ -15,9 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
       level: 7
     };
     const map = new kakao.maps.Map(mapContainer, mapOption);
-    
+
     let markers = [];
     let polylines = [];
+    let places = [];
 
     function clearMap() {
       markers.forEach(marker => marker.setMap(null));
@@ -40,11 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    function displayPlaces(places) {
+    function displayPlaces(placesData) {
       clearMap();
       const path = [];
-      
-      places.forEach(place => {
+
+      placesData.forEach(place => {
         const position = new kakao.maps.LatLng(place.y, place.x);
         const marker = new kakao.maps.Marker({
           position: position,
@@ -81,11 +81,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchPlaces() {
-      fetch('https://www.2024capstoneaiplanner.site/api/processPlaces') // 여기에 실제 API 엔드포인트를 넣으세요
+      fetch('https://www.2024capstoneaiplanner.site/api/processPlaces', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ places: places })
+      })
         .then(response => response.json())
         .then(data => {
-          if (data.locations && data.locations.length > 0) {
-            const sortedPlaces = data.locations.map(place => {
+          if (data.result && data.result.length > 0) {
+            const sortedPlaces = data.result.map(place => {
               return {
                 y: place.y,
                 x: place.x,
@@ -104,7 +110,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 페이지 로드 시 장소 자동 로드
-    fetchPlaces();
+    // 장소 추가 버튼 클릭 이벤트
+    document.getElementById('addPlaceBtn').addEventListener('click', function() {
+      const placeName = document.getElementById('placeInput').value;
+      if (placeName) {
+        places.push(placeName);
+        document.getElementById('placeList').innerHTML += `<li>${placeName}</li>`;
+        document.getElementById('placeInput').value = '';
+      }
+    });
+
+    // 경로 표시 버튼 클릭 이벤트
+    document.getElementById('showRouteBtn').addEventListener('click', function() {
+      if (places.length < 2) {
+        alert('Please enter at least 2 places.');
+        return;
+      }
+      fetchPlaces(); // 서버에서 장소 정보를 받아와 지도에 표시
+    });
   });
 });
