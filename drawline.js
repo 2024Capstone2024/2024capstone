@@ -30,38 +30,53 @@ document.addEventListener('DOMContentLoaded', () => {
       switch (category) {
         case '음식점':
         case '카페':
-          return '#0000FF'; // 파란색
+          return 'red'; // 빨간색
         case '숙박':
-          return '#800080'; // 보라색
+          return 'purple'; // 보라색
         case '관광명소':
-          return '#008000'; // 초록색
+          return 'green'; // 초록색
         default:
-          return '#808080'; // 회색
+          return 'blue'; // 파랑
       }
     }
 
     function displayPlaces(placesData) {
       clearMap();
       const path = [];
-
+  
       placesData.forEach(place => {
-        const position = new kakao.maps.LatLng(place.y, place.x);
-        const marker = new kakao.maps.Marker({
-          position: position,
-          map: map,
-          title: place.place_name
-        });
-
-        // 마커 색상 설정
-        const color = getColor(place.category_group_name);
-        const markerImage = new kakao.maps.MarkerImage(
-          `https://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
-          new kakao.maps.Size(32, 32)
-        );
-        marker.setImage(markerImage);
-
-        markers.push(marker);
-        path.push(position);
+          const position = new kakao.maps.LatLng(place.y, place.x);
+          const marker = new kakao.maps.Marker({
+              position: position,
+              map: map,
+              title: place.place_name
+          });
+  
+          // 마커 이미지 URL 설정
+          let markerImageUrl;
+  
+          const color = getColor(place.category_group_name);
+  
+          if (color === 'red') {
+              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+          } else if (color === 'blue') {
+              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png';
+          } else if (color === 'green') {
+              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_green.png';
+          } else if (color === 'purple') {
+              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_purple.png';
+          } else {
+              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'; // 기본 파란색
+          }
+  
+          const markerImage = new kakao.maps.MarkerImage(
+              markerImageUrl,
+              new kakao.maps.Size(32, 32)
+          );
+          marker.setImage(markerImage);
+  
+          markers.push(marker);
+          path.push(position);
       });
 
       // 장소 간 선 그리기
