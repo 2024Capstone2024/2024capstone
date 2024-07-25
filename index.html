@@ -41,24 +41,29 @@
 
     
     <style>
-        #map, #map1, #map2, #map3 {
+        #map {
             width: 100%;
             height: 400px;
             margin-bottom: 20px;
         }
-        #placesList, #placesList1 {
-            margin: 10px 0;
-            padding: 0;
-            list-style: none;
+        #map1 {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
         }
-        #placesList li, #placesList1 li {
-            margin: 5px 0;
-            padding: 5px;
-            border: 1px solid #ddd;
-            cursor: pointer;
+        #map2 {
+            width: 100%;
+            height: 400px;
+            margin-bottom: 20px;
         }
+        #map3 { width: 100%; height: 350px; }
+        #placesList { margin: 10px 0; padding: 0; list-style: none; }
+        #placesList li { margin: 5px 0; padding: 5px; border: 1px solid #ddd; cursor: pointer; }
+        #placesList1 { margin: 10px 0; padding: 0; list-style: none; }
+        #placesList1 li { padding: 5px; cursor: pointer; }
     </style>
 </head>
+
 <body>
     <!-- Spinner Start -->
     <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
@@ -69,12 +74,18 @@
     <!-- Spinner End -->
 
     <!-- 맵을 표시할 div 추가 -->
+    
+    
+
+    
+
     <div>
-        <div id="map"></div>
+        <div id="map" style="width:100%;height:400px;"></div>
         <input type="text" id="keyword" placeholder="장소 검색어 입력">
         <button id="searchBtn">장소 검색</button>
     </div>
     <script src="searchroutes.js" defer></script>
+    <div id="map"></div>
 
     <div>
         <h3>Place List</h3>
@@ -87,6 +98,7 @@
         <h3>Display Route</h3>
         <button id="showRouteBtn">Show Route</button>
     </div>
+    
     <div id="map1"></div>
     <div id="map2"></div>
     <script src="drawline.js" defer></script>
@@ -98,7 +110,7 @@
     </div>
     <div id="map3"></div>
     <ul id="placesList1"></ul>
-    <script src="placelist.js" defer></script>
+    <script src="placelist.js"></script>
 
     <!-- Topbar Start -->
     <div class="container-fluid bg-dark px-5 d-none d-lg-block">
