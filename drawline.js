@@ -1,82 +1,110 @@
-window.kakao.maps.load(() => {
-  const mapContainer1 = document.getElementById('map1'); // 지도1을 표시할 div
-  const mapOption = {
-    center: new window.kakao.maps.LatLng(37.566826, 126.9786567), // 서울시청 좌표
-    level: 7 // 지도 확대 레벨
-  };
+// map.js
 
-  // 지도1 객체 생성
-  const map1 = new window.kakao.maps.Map(mapContainer1, mapOption);
-
-  // 입력된 장소들을 저장할 배열
-  let places = [];
-
-  // 장소 추가 버튼 클릭 이벤트
-  document.getElementById('addPlaceBtn').addEventListener('click', function() {
-    const placeName = document.getElementById('placeInput').value;
-    if (placeName) {
-      places.push(placeName);
-      document.getElementById('placeList').innerHTML += `<li>${placeName}</li>`;
-      document.getElementById('placeInput').value = '';
-    }
-  });
-
-  // 경로 표시 버튼 클릭 이벤트
-  document.getElementById('showRouteBtn').addEventListener('click', function() {
-    if (places.length < 2) {
-      alert('Please enter at least 2 places.');
+document.addEventListener('DOMContentLoaded', () => {
+  const kakao = window.kakao;
+  kakao.maps.load(() => {
+    const mapContainer = document.getElementById('map1');
+    
+    if (!mapContainer) {
+      console.error('Map container not found!');
       return;
     }
 
-    // 백엔드 서버로 POST 요청 보내기
-    fetch('https://www.2024capstoneaiplanner.site/api/drawline', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ places: places })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Received data:', data);
-      showRouteOnMap(data); // 지도에 경로 표시 함수 호출
-    })
-    .catch(error => {
-      console.error('Error fetching route:', error);
-      alert('Failed to fetch route.');
-    });
-  });
+    const mapOption = {
+      center: new kakao.maps.LatLng(37.566826, 126.9786567),
+      level: 7
+    };
+    const map = new kakao.maps.Map(mapContainer, mapOption);
+    
+    let markers = [];
+    let polylines = [];
 
-  // 지도에 경로를 선으로 표시하는 함수
-  function showRouteOnMap(routeData) {
-    const mapContainer2 = document.getElementById('map2'); // 지도2를 표시할 div
-
-    // 지도2 객체 생성
-    const map2 = new window.kakao.maps.Map(mapContainer2, mapOption);
-
-    // 경로 정보를 이용하여 지도에 선 그리기
-    const path = routeData.map(point => new window.kakao.maps.LatLng(point.y, point.x));
-
-    for (let i = 0; i < path.length - 1; i++) {
-      // 각 두 지점을 연결하는 선 생성
-      const polyline = new window.kakao.maps.Polyline({
-        path: [path[i], path[i + 1]],
-        strokeWeight: 4,
-        strokeColor: '#FF0000',
-        strokeOpacity: 0.7,
-        strokeStyle: 'solid'
-      });
-
-      // 지도2에 선 표시
-      polyline.setMap(map2);
+    function clearMap() {
+      markers.forEach(marker => marker.setMap(null));
+      polylines.forEach(polyline => polyline.setMap(null));
+      markers = [];
+      polylines = [];
     }
 
-    // 첫 번째 장소로 지도2 중심 이동
-    map2.setCenter(new window.kakao.maps.LatLng(path[0].getLat(), path[0].getLng()));
-  }
+    function getColor(category) {
+      switch (category) {
+        case '음식점':
+        case '카페':
+          return '#0000FF'; // 파란색
+        case '숙박':
+          return '#800080'; // 보라색
+        case '관광명소':
+          return '#008000'; // 초록색
+        default:
+          return '#808080'; // 회색
+      }
+    }
+
+    function displayPlaces(places) {
+      clearMap();
+      const path = [];
+      
+      places.forEach(place => {
+        const position = new kakao.maps.LatLng(place.y, place.x);
+        const marker = new kakao.maps.Marker({
+          position: position,
+          map: map,
+          title: place.place_name
+        });
+
+        // 마커 색상 설정
+        const color = getColor(place.category_group_name);
+        const markerImage = new kakao.maps.MarkerImage(
+          `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
+          new kakao.maps.Size(32, 32)
+        );
+        marker.setImage(markerImage);
+
+        markers.push(marker);
+        path.push(position);
+      });
+
+      // 장소 간 선 그리기
+      if (path.length > 1) {
+        for (let i = 0; i < path.length - 1; i++) {
+          const polyline = new kakao.maps.Polyline({
+            path: [path[i], path[i + 1]],
+            strokeWeight: 5,
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.7,
+            strokeStyle: 'solid'
+          });
+          polyline.setMap(map);
+          polylines.push(polyline);
+        }
+      }
+    }
+
+    function fetchPlaces() {
+      fetch('https://www.2024capstoneaiplanner.site/api/processPlaces') // 여기에 실제 API 엔드포인트를 넣으세요
+        .then(response => response.json())
+        .then(data => {
+          if (data.places && data.places.length > 0) {
+            const sortedPlaces = data.places.map(place => {
+              return {
+                y: place.y,
+                x: place.x,
+                place_name: place.place_name,
+                category_group_name: place.category_group_name || 'Unknown'
+              };
+            });
+            displayPlaces(sortedPlaces);
+          } else {
+            alert('No places found');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching places:', error);
+          alert('Failed to fetch places');
+        });
+    }
+
+    // 페이지 로드 시 장소 자동 로드
+    fetchPlaces();
+  });
 });
