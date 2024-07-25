@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // 마커 색상 설정
         const color = getColor(place.category_group_name);
         const markerImage = new kakao.maps.MarkerImage(
-          `http://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
+          `https://maps.google.com/mapfiles/ms/icons/${color}-dot.png`,
           new kakao.maps.Size(32, 32)
         );
         marker.setImage(markerImage);
