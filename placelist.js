@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
       function displayPlaces(places) {
         placesList.innerHTML = '';
-        places.slice(0, 10).forEach((place, index) => {  // 상위 10개의 결과만 표시
+        places.slice(0, 10).forEach((place, index) => {
           const li = document.createElement('li');
           li.innerText = `${index + 1}. ${place.place_name} - ${place.address_name}`;
           li.onclick = () => {
@@ -29,16 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
               map: map
             });
   
+            const content = `<div style="padding:5px; cursor:pointer;" onclick="window.location.href='https://place.map.kakao.com/${place.id}'">${place.place_name}</div>`;
             const infowindow = new kakao.maps.InfoWindow({
-              content: `<div style="padding:5px; cursor:pointer;">${place.place_name}</div>`
+              content: content
             });
   
             infowindow.open(map, marker);
-  
-            // 정보창 클릭 이벤트 추가
-            kakao.maps.event.addListener(infowindow, 'click', () => {
-              window.location.href = `https://place.map.kakao.com/${place.id}`; // Kakao Place ID로 링크 이동
-            });
   
             map.setCenter(placePosition);
           };
