@@ -29,16 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
               map: map
             });
   
+            const content = `<div style="padding:5px; cursor:pointer;" onclick="window.open('https://place.map.kakao.com/${place.id}', '_blank')">${place.place_name}</div>`;
+  
             const infowindow = new kakao.maps.InfoWindow({
-              content: `<div style="padding:5px; cursor:pointer;">${place.place_name}</div>`
+              content: content
             });
   
             infowindow.open(map, marker);
-  
-            // 마커 클릭 이벤트 추가
-            kakao.maps.event.addListener(marker, 'click', () => {
-              window.location.href = `https://place.map.kakao.com/${place.id}`; // Kakao Place ID로 링크 이동
-            });
   
             map.setCenter(placePosition);
           };
