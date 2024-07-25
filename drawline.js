@@ -84,8 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch('https://www.2024capstoneaiplanner.site/api/processPlaces') // 여기에 실제 API 엔드포인트를 넣으세요
         .then(response => response.json())
         .then(data => {
-          if (data.places && data.places.length > 0) {
-            const sortedPlaces = data.places.map(place => {
+          if (data.locations && data.locations.length > 0) {
+            const sortedPlaces = data.locations.map(place => {
               return {
                 y: place.y,
                 x: place.x,
