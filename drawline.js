@@ -90,8 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
       })
         .then(response => response.json())
         .then(data => {
-          if (data.result && data.result.length > 0) {
-            const sortedPlaces = data.result.map(place => {
+          if (data.sortedPlaces && data.sortedPlaces.length > 0) {
+            const sortedPlaces = data.sortedPlaces.map(place => {
               return {
                 y: place.y,
                 x: place.x,
