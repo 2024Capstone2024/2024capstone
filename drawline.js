@@ -26,60 +26,42 @@ document.addEventListener('DOMContentLoaded', () => {
       polylines = [];
     }
 
-    function getColor(category) {
-      switch (category) {
-        case '음식점':
-        case '카페':
-          return 'red'; // 빨간색
-        case '숙박':
-          return 'purple'; // 보라색
-        case '관광명소':
-          return 'green'; // 초록색
-        default:
-          return 'blue'; // 파랑
-      }
+    // 카테고리별 마커 이미지 URL
+    const markerImageUrls = {
+      '음식점': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/food_marker.png',
+      '카페': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/cafe.png',
+      '숙박': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/accommodation_marker.png',
+      '관광명소': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/tourist_marker.png',
+      'default': 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'
+    };
+
+    function getMarkerImageUrl(category) {
+      return markerImageUrls[category] || markerImageUrls['default'];
     }
 
     function displayPlaces(placesData) {
       clearMap();
       const path = [];
-  
+
       placesData.forEach(place => {
-          const position = new kakao.maps.LatLng(place.y, place.x);
-          const marker = new kakao.maps.Marker({
-              position: position,
-              map: map,
-              title: place.place_name
-          });
-  
-          // 마커 이미지 URL 설정
-          let markerImageUrl;
-  
-          const color = getColor(place.category_group_name);
-  
-          if (color === 'red') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png
-          } else if (color === 'blue') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png';
-          } else if (color === 'green') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_green.png';
-          } else if (color === 'purple') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_purple.png';
-          } else {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'; // 기본 파란색
-          }
-  
-          const markerImage = new kakao.maps.MarkerImage(
-              markerImageUrl,
-              new kakao.maps.Size(32, 32)
-          );
-          marker.setImage(markerImage);
-  
-          markers.push(marker);
-          path.push(position);
+        const position = new kakao.maps.LatLng(place.y, place.x);
+        const marker = new kakao.maps.Marker({
+          position: position,
+          map: map,
+          title: place.place_name
+        });
+
+        const markerImageUrl = getMarkerImageUrl(place.category_group_name);
+        const markerImage = new kakao.maps.MarkerImage(
+          markerImageUrl,
+          new kakao.maps.Size(32, 32) // 이미지 크기 조정
+        );
+        marker.setImage(markerImage);
+
+        markers.push(marker);
+        path.push(position);
       });
 
-      // 장소 간 선 그리기
       if (path.length > 1) {
         for (let i = 0; i < path.length - 1; i++) {
           const polyline = new kakao.maps.Polyline({
@@ -125,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 장소 추가 버튼 클릭 이벤트
     document.getElementById('addPlaceBtn').addEventListener('click', function() {
       const placeName = document.getElementById('placeInput').value;
       if (placeName) {
@@ -135,13 +116,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // 경로 표시 버튼 클릭 이벤트
     document.getElementById('showRouteBtn').addEventListener('click', function() {
       if (places.length < 2) {
         alert('Please enter at least 2 places.');
         return;
       }
-      fetchPlaces(); // 서버에서 장소 정보를 받아와 지도에 표시
+      fetchPlaces();
     });
   });
 });
