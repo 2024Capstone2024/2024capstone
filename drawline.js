@@ -58,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
           const color = getColor(place.category_group_name);
   
           if (color === 'red') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+              markerImageUrl = 'https://raw.githubusercontent.com/2024Capstone2024/image/main/185119_fork_knife_eat_food_icon.png
+';
           } else if (color === 'blue') {
               markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png';
           } else if (color === 'green') {
