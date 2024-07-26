@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       '음식점': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/food.png',
       '카페': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/cafe.png',
       '숙박': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/hotel.png',
-      '관광명소': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/landmakr.png',
+      '관광명소': 'https://raw.githubusercontent.com/2024Capstone2024/image/bf36a819d509ac1f7f422e045673a328805e1ec1/landmark.png',
       'default': 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png'
     };
 
