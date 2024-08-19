@@ -1,4 +1,5 @@
 // 카카오맵 API 초기화
+/*
 const kakao = window.kakao;
 kakao.maps.load(() => {
   const mapContainer = document.getElementById('map'); // 지도를 표시할 div
@@ -12,23 +13,14 @@ kakao.maps.load(() => {
 
   // 검색된 장소를 지도에 표시하는 함수
   function showPlaceOnMap(place) {
-    // place 데이터가 배열인지 확인
-    const placeData = Array.isArray(place) ? place[0] : place;
-
-    if (!placeData || !placeData.y || !placeData.x) {
-      console.error('Invalid place data:', place);
-      return;
-    }
-
-    const placePosition = new kakao.maps.LatLng(placeData.y, placeData.x); // 장소의 좌표
+    const placePosition = new kakao.maps.LatLng(place.y, place.x); // 장소의 좌표
     const marker = new kakao.maps.Marker({
       position: placePosition,
       map: map
     });
 
-    // 지도 중심을 검색된 장소 위치로 이동 및 확대 레벨 설정
+    // 지도 중심을 검색된 장소 위치로 이동
     map.setCenter(placePosition);
-    map.setLevel(3); // 지도를 더 확대합니다
   }
 
   // 장소 검색 함수
@@ -36,10 +28,6 @@ kakao.maps.load(() => {
     fetch(`https://www.2024capstoneaiplanner.site/api/searchPlace?keyword=${encodeURIComponent(keyword)}`)
       .then(response => response.json())
       .then(data => {
-        if (!data || (Array.isArray(data) && data.length === 0)) {
-          alert('장소를 찾을 수 없습니다.');
-          return;
-        }
         showPlaceOnMap(data); // 검색 결과를 지도에 표시
       })
       .catch(error => {
@@ -55,3 +43,49 @@ kakao.maps.load(() => {
     searchPlace(keyword);
   });
 });
+*/
+
+async function searchPlaces() {
+  const query = document.getElementById('keyword').value;
+  
+  if (!query) {
+      alert('Please enter a keyword!');
+      return;
+  }
+
+  try {
+      const response = await fetch('https://www.2024capstoneaiplanner.site/api/searchPlace', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+      });
+
+      if (!response.ok) {
+          throw new Error('Failed to fetch results');
+      }
+
+      const results = await response.json();
+      displayResults(results);
+  } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while fetching results.');
+  }
+}
+
+function displayResults(results) {
+  const resultsContainer = document.getElementById('results');
+  resultsContainer.innerHTML = '';
+
+  results.forEach(result => {
+      const listItem = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = result.place_url;
+      link.textContent = result.place_name;
+      link.target = '_blank';
+
+      listItem.appendChild(link);
+      resultsContainer.appendChild(listItem);
+  });
+}

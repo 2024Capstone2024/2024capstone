@@ -82,10 +82,13 @@
     <div>
         <div id="map" style="width:100%;height:400px;"></div>
         <input type="text" id="keyword" placeholder="장소 검색어 입력">
-        <button id="searchBtn">장소 검색</button>
+        <button onclick="searchPlaces()">Search</button>
+        <ul id="results"></ul>
     </div>
     <script src="searchroutes.js" defer></script>
     <div id="map"></div>
+
+
     <!-- 경로띄우기 -->
     <div>
         <h3>Place List</h3>
