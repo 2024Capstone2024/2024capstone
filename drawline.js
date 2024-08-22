@@ -58,15 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
           const color = getColor(place.category_group_name);
   
           if (color === 'red') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
+              markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/dining_category_pc.png?version=8'; //음식점,카페
           } else if (color === 'blue') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png';
+              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'; //그외
           } else if (color === 'green') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_green.png';
+              markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/camping_category_pc.png?version=8'; //명소
           } else if (color === 'purple') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_purple.png';
+              markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/pension_category_pc.png?version=8'; //숙박
           } else {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'; // 기본 파란색
+              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'; // 기본 파란색 , 그외
           }
   
           const markerImage = new kakao.maps.MarkerImage(
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
             path: [path[i], path[i + 1]],
             strokeWeight: 5,
             strokeColor: '#FF0000',
-            strokeOpacity: 0.7,
+            strokeOpacity: 0.4,
             strokeStyle: 'solid'
           });
           polyline.setMap(map);
