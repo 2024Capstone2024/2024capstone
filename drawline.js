@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
           } else if (color === 'blue') {
               markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; //그외
           } else if (color === 'green') {
-              markerImageUrl = 'https://t4.ftcdn.net/jpg/06/76/15/19/240_F_676151903_eVJ3hHCI0rmFinhSKb2L98VTAkPwUHkH.jpg'; //명소
+              markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; //명소
           } else if (color === 'purple') {
               markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/pension_category_pc.png?version=8'; //숙박
           } else {
