@@ -60,13 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
           if (color === 'red') {
               markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/dining_category_pc.png?version=8'; //음식점,카페
           } else if (color === 'blue') {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'; //그외
+              markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; //그외
           } else if (color === 'green') {
-              markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/camping_category_pc.png?version=8'; //명소
+              markerImageUrl = 'https://t4.ftcdn.net/jpg/06/76/15/19/240_F_676151903_eVJ3hHCI0rmFinhSKb2L98VTAkPwUHkH.jpg'; //명소
           } else if (color === 'purple') {
               markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/pension_category_pc.png?version=8'; //숙박
           } else {
-              markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png'; // 기본 파란색 , 그외
+              markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 기본 파란색 , 그외
           }
   
           const markerImage = new kakao.maps.MarkerImage(
