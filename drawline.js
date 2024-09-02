@@ -44,7 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function displayPlaces(placesData, dayIndex) {
       clearMap();
       const path = [];
-  
+
+      // 처음 장소의 위치로 지도 중심 이동
+      if (placesData.length > 0) {
+        const firstPlace = placesData[0];
+        map.setCenter(new kakao.maps.LatLng(firstPlace.y, firstPlace.x));
+      }
+
       placesData.forEach(place => {
         const position = new kakao.maps.LatLng(place.y, place.x);
         const marker = new kakao.maps.Marker({
@@ -52,29 +58,29 @@ document.addEventListener('DOMContentLoaded', () => {
           map: map,
           title: place.place_name
         });
-  
+
         // 마커 이미지 URL 설정
         let markerImageUrl;
         const color = getColor(place.category_group_name);
-  
+
         if (color === 'red') {
           markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/dining_category_pc.png?version=8'; // 음식점, 카페
         } else if (color === 'blue') {
-          markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 기타
+          markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 그 외
         } else if (color === 'green') {
-          markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 관광명소
+          markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 명소
         } else if (color === 'purple') {
           markerImageUrl = 'https://map.pstatic.net/resource/api/v2/image/maps/around-category/pension_category_pc.png?version=8'; // 숙박
         } else {
-          markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 기본
+          markerImageUrl = 'http://t1.daumcdn.net/localimg/localimages/07/2018/pc/img/marker_spot.png'; // 기본 파란색, 그 외
         }
-  
+
         const markerImage = new kakao.maps.MarkerImage(
           markerImageUrl,
           new kakao.maps.Size(32, 32)
         );
         marker.setImage(markerImage);
-  
+
         markers.push(marker);
         path.push(position);
       });
@@ -179,6 +185,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+
+    // `Add Day` 버튼 클릭 이벤트 추가
+    document.getElementById('addDayBtn').addEventListener('click', function() {
+      addDaySection();
+    });
 
     // 초기적으로 첫 번째 일차별 폼을 추가
     addDaySection();
