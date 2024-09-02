@@ -51,6 +51,18 @@
             height: 400px;
             margin-bottom: 20px;
         }
+        #controlPanel {
+            margin-top: 10px;
+        }
+        label {
+            margin-right: 10px;
+        }
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+        .day-section {
+            margin-bottom: 20px;
+        }
         #map2 {
             width: 100%;
             height: 400px;
@@ -87,20 +99,18 @@
 
 
     <!-- 경로띄우기 -->
-    <div>
-        <h3>Place List</h3>
-        <input type="text" id="placeInput" placeholder="Enter a place name">
-        <button id="addPlaceBtn">Add Place</button>
-        <ul id="placeList"></ul>
+    <div id="map1"></div>
+    <div id="controlPanel">
+        <!-- 체크박스와 라벨이 여기에 동적으로 추가됩니다. -->
     </div>
-      
-    <div>
-        <h3>Display Route</h3>
-        <button id="showRouteBtn">Show Route</button>
+
+    <div id="daySections">
+        <!-- 각 날짜별 장소 입력 폼이 여기에 동적으로 추가됩니다. -->
     </div>
     
-    <div id="map1"></div>
-    <div id="map2"></div>
+    <button id="submitPlacesBtn">Submit Places</button>
+    <ul id="placeList"></ul>
+
     <script src="drawline.js" defer></script>
     
     <!-- 목록 띄우기 -->
