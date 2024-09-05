@@ -73,6 +73,15 @@
         #placesList li { margin: 5px 0; padding: 5px; border: 1px solid #ddd; cursor: pointer; }
         #placesList1 { margin: 10px 0; padding: 0; list-style: none; }
         #placesList1 li { padding: 5px; cursor: pointer; }
+
+        #map4 {
+            width: 100%;
+            height: 500px;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+        
     </style>
 </head>
 
@@ -122,6 +131,39 @@
     <ul id="placesList1"></ul>
     <div id="map3"></div>
     <script src="placelist.js"></script>
+
+     <!-- 실제경로  -->
+    <div id="map4"></div>
+    
+    <!-- 지도 제어를 위한 입력 폼과 버튼들 -->
+    <div class="controls">
+        <h4>출발지</h4>
+        <input type="text" id="startPlace" placeholder="장소 이름" />
+        <button onclick="setPlace('startPoint')">출발지 설정</button>
+    </div>
+    <div class="controls">
+        <h4>목적지</h4>
+        <input type="text" id="endPlace" placeholder="장소 이름" />
+        <button onclick="setPlace('endPoint')">목적지 설정</button>
+    </div>
+    <div class="controls">
+        <h4>경유지</h4>
+        <input type="text" id="waypointPlace" placeholder="경유지 장소" />
+        <button onclick="setPlace('waypoint')">경유지 추가</button>
+    </div>
+    <div class="controls">
+        <button onclick="getCarDirection()">경로 구하기</button>
+        <button onclick="calculateDistances()">거리 계산</button>
+    </div>
+    <div class="controls">
+        <h4>장소 간 거리</h4>
+        <ul id="distanceList"></ul>
+    </div>
+
+    <!-- 카카오 맵 API 로드 -->
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY"></script>
+    <!-- 사용자 정의 JavaScript 파일 로드 -->
+    <script src="app.js"></script>
 
     <!-- Topbar Start -->
     <div class="container-fluid bg-dark px-5 d-none d-lg-block">
