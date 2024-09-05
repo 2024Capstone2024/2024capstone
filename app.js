@@ -1,4 +1,5 @@
 let dayData = []; // 각 날짜별 데이터를 저장할 배열
+let polylines = []; // Polyline 객체들을 저장할 배열
 
 window.onload = function () {
     const kakao = window.kakao;
@@ -112,6 +113,11 @@ async function getCarDirection(dayIndex) {
             });
         });
 
+        // 이전에 생성된 Polyline 제거
+        if (polylines[dayIndex]) {
+            polylines[dayIndex].setMap(null);
+        }
+
         const polyline = new kakao.maps.Polyline({
             path: linePath,
             strokeWeight: 5,
@@ -119,10 +125,40 @@ async function getCarDirection(dayIndex) {
             strokeOpacity: 0.7,
             strokeStyle: 'solid'
         });
+        
+        // Polyline을 지도에 추가
         polyline.setMap(map);
+        polylines[dayIndex] = polyline;
+
+        // 체크 해제된 다른 경로는 지도에서 제거
+        polylines.forEach((poly, index) => {
+            if (index !== dayIndex && poly) {
+                poly.setMap(null);
+            }
+        });
 
     } catch (error) {
         console.error('Error:', error);
+    }
+}
+
+// 체크박스 선택에 따라 경로 표시 제어
+function showRouteForDay(dayIndex, isChecked) {
+    if (isChecked) {
+        if (polylines[dayIndex]) {
+            polylines[dayIndex].setMap(map); // Polyline을 지도에 추가
+
+            // 지도 중심을 출발지로 이동
+            const startLatLng = new kakao.maps.LatLng(dayData[dayIndex].startPoint.lat, dayData[dayIndex].startPoint.lng);
+            map.panTo(startLatLng);
+        } else {
+            getCarDirection(dayIndex); // Polyline이 없으면 경로를 새로 가져옴
+        }
+    } else {
+        // Polyline을 지도에서 제거
+        if (polylines[dayIndex]) {
+            polylines[dayIndex].setMap(null);
+        }
     }
 }
 
@@ -158,16 +194,6 @@ function Day() {
     label.htmlFor = `dayCheckbox${dayIndex}`;
     label.innerText = `Day ${dayIndex + 1}`;
     checkboxContainer.appendChild(label);
-}
-
-// 체크박스 선택에 따라 경로 표시 제어
-function showRouteForDay(dayIndex, isChecked) {
-    if (isChecked) {
-        getCarDirection(dayIndex); // 체크된 날짜의 경로 표시
-    } else {
-        // 체크 해제 시 해당 날짜의 경로 제거 (구현 필요)
-        // 예: 기존 경로 Polyline 객체를 저장해두고 제거하는 로직 추가
-    }
 }
 
 // `Add Day` 버튼 클릭 이벤트 추가
