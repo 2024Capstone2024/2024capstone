@@ -1,20 +1,13 @@
-let pointObj = {
-    startPoint: { marker: null, lat: null, lng: null },
-    endPoint: { marker: null, lat: null, lng: null },
-    waypoints: [] // 경유지 리스트
-};
+let dayData = []; // 각 날짜별 데이터를 저장할 배열
 
 window.onload = function () {
-    // 카카오맵 API 로드 후 초기화
     const kakao = window.kakao;
     kakao.maps.load(() => {
-        const mapContainer = document.getElementById('map4'); // 지도를 표시할 div
+        const mapContainer = document.getElementById('map4');
         const mapOption = {
-            center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도 초기 중심 좌표 (서울)
-            level: 7 // 지도 확대 레벨
+            center: new kakao.maps.LatLng(37.566826, 126.9786567),
+            level: 7
         };
-
-        // 지도 객체 생성
         map = new kakao.maps.Map(mapContainer, mapOption);
     });
 };
@@ -26,20 +19,22 @@ function setCenter(lat, lng) {
 }
 
 // 지도에 마커를 추가하는 함수
-function setPoint(lat, lng, pointType) {
+function setPoint(lat, lng, pointType, dayIndex) {
     setCenter(lat, lng);
     let marker = new kakao.maps.Marker({
         position: new kakao.maps.LatLng(lat, lng)
     });
 
+    if (!dayData[dayIndex]) dayData[dayIndex] = { startPoint: null, endPoint: null, waypoints: [] };
+
     if (pointType === 'waypoint') {
-        if (pointObj.waypoints.length >= 5) pointObj.waypoints.shift(); // 최대 5개 경유지 유지
-        pointObj.waypoints.push({ marker, lat, lng });
+        if (dayData[dayIndex].waypoints.length >= 5) dayData[dayIndex].waypoints.shift(); // 최대 5개 경유지 유지
+        dayData[dayIndex].waypoints.push({ marker, lat, lng });
     } else {
-        if (pointObj[pointType].marker !== null) {
-            pointObj[pointType].marker.setMap(null);
+        if (dayData[dayIndex][pointType]) {
+            dayData[dayIndex][pointType].marker.setMap(null); // 기존 마커 제거
         }
-        pointObj[pointType] = { marker, lat, lng };
+        dayData[dayIndex][pointType] = { marker, lat, lng };
     }
     marker.setMap(map);
 }
@@ -50,8 +45,8 @@ function getLatLngFromPlace(placeName) {
         const ps = new kakao.maps.services.Places();
         ps.keywordSearch(placeName, (data, status) => {
             if (status === kakao.maps.services.Status.OK) {
-                const lat = data[0].y; // 위도
-                const lng = data[0].x; // 경도
+                const lat = data[0].y;
+                const lng = data[0].x;
                 resolve({ lat, lng });
             } else {
                 reject(new Error('Failed to find place'));
@@ -60,26 +55,25 @@ function getLatLngFromPlace(placeName) {
     });
 }
 
-async function setPlace(pointType) {
-    const placeName = document.getElementById(pointType === 'startPoint' ? 'startPlace' : (pointType === 'endPoint' ? 'endPlace' : 'waypointPlace')).value;
+// 장소 설정 함수 (출발지, 목적지, 경유지)
+async function setPlace(pointType, dayIndex) {
+    const placeName = document.getElementById(pointType === 'startPoint' ? `startPlace${dayIndex}` : (pointType === 'endPoint' ? `endPlace${dayIndex}` : `waypointPlace${dayIndex}`)).value;
     try {
         const { lat, lng } = await getLatLngFromPlace(placeName);
-        setPoint(lat, lng, pointType);
+        setPoint(lat, lng, pointType, dayIndex);
     } catch (error) {
         console.error('Error:', error);
     }
 }
 
-
-// 장소를 설정하는 함수
-async function getCarDirection() {
-    if (!pointObj.startPoint.lat || !pointObj.endPoint.lat) {
+// 경로 요청 및 표시 함수
+async function getCarDirection(dayIndex) {
+    if (!dayData[dayIndex] || !dayData[dayIndex].startPoint || !dayData[dayIndex].endPoint) {
         console.error('출발지 또는 목적지가 설정되지 않았습니다.');
         return;
     }
 
     try {
-        // 백엔드로 요청 보내기
         const response = await fetch('https://www.2024capstoneaiplanner.site/api/getCarDirection', {
             method: 'POST',
             headers: {
@@ -87,14 +81,14 @@ async function getCarDirection() {
             },
             body: JSON.stringify({
                 startPoint: {
-                    lat: pointObj.startPoint.lat,
-                    lng: pointObj.startPoint.lng
+                    lat: dayData[dayIndex].startPoint.lat,
+                    lng: dayData[dayIndex].startPoint.lng
                 },
                 endPoint: {
-                    lat: pointObj.endPoint.lat,
-                    lng: pointObj.endPoint.lng
+                    lat: dayData[dayIndex].endPoint.lat,
+                    lng: dayData[dayIndex].endPoint.lng
                 },
-                waypoints: pointObj.waypoints.map(point => ({
+                waypoints: dayData[dayIndex].waypoints.map(point => ({
                     lat: point.lat,
                     lng: point.lng
                 }))
@@ -107,7 +101,6 @@ async function getCarDirection() {
 
         const data = await response.json();
 
-        // 받아온 경로 데이터를 지도에 표시
         const linePath = [];
         data.routes[0].sections.forEach(section => {
             section.roads.forEach(road => {
@@ -133,41 +126,52 @@ async function getCarDirection() {
     }
 }
 
+// 날짜 추가 함수
+function addDay() {
+    const daySections = document.getElementById('daySections');
+    const dayIndex = daySections.children.length;
 
+    const section = document.createElement('div');
+    section.className = 'day-section';
+    section.innerHTML = `
+        <h2>Day ${dayIndex + 1}</h2>
+        <input type="text" id="startPlace${dayIndex}" placeholder="출발지 입력">
+        <input type="text" id="endPlace${dayIndex}" placeholder="도착지 입력">
+        <input type="text" id="waypointPlace${dayIndex}" placeholder="경유지 입력">
+        <button onclick="setPlace('startPoint', ${dayIndex})">출발지 설정</button>
+        <button onclick="setPlace('endPoint', ${dayIndex})">도착지 설정</button>
+        <button onclick="setPlace('waypoint', ${dayIndex})">경유지 추가</button>
+        <button onclick="getCarDirection(${dayIndex})">경로 표시</button>
+        <ul id="waypointList${dayIndex}"></ul>
+    `;
+    daySections.appendChild(section);
 
-// 장소 간 거리를 계산하는 함수
-function calculateDistances() {
-    const places = [
-        pointObj.startPoint,
-        ...pointObj.waypoints,
-        pointObj.endPoint
-    ].filter(point => point.lat && point.lng);
+    // 체크박스 추가
+    const checkboxContainer = document.getElementById('checkboxContainer');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.id = `dayCheckbox${dayIndex}`;
+    checkbox.value = dayIndex;
+    checkbox.onchange = () => showRouteForDay(dayIndex, checkbox.checked);
+    checkboxContainer.appendChild(checkbox);
+    const label = document.createElement('label');
+    label.htmlFor = `dayCheckbox${dayIndex}`;
+    label.innerText = `Day ${dayIndex + 1}`;
+    checkboxContainer.appendChild(label);
+}
 
-    const distanceList = document.getElementById('distanceList');
-    distanceList.innerHTML = '';
-
-    for (let i = 0; i < places.length; i++) {
-        for (let j = i + 1; j < places.length; j++) {
-            const distance = calculateDistance(
-                places[i].lat, places[i].lng,
-                places[j].lat, places[j].lng
-            );
-            const li = document.createElement('li');
-            li.textContent = `${i === 0 ? '출발지' : i === places.length - 1 ? '목적지' : `경유지 ${i}`} - ${j === 0 ? '출발지' : j === places.length - 1 ? '목적지' : `경유지 ${j}`}: ${distance.toFixed(2)} km`;
-            distanceList.appendChild(li);
-        }
+// 체크박스 선택에 따라 경로 표시 제어
+function showRouteForDay(dayIndex, isChecked) {
+    if (isChecked) {
+        getCarDirection(dayIndex); // 체크된 날짜의 경로 표시
+    } else {
+        // 체크 해제 시 해당 날짜의 경로 제거 (구현 필요)
+        // 예: 기존 경로 Polyline 객체를 저장해두고 제거하는 로직 추가
     }
 }
 
-// 두 좌표 간 거리를 계산하는 함수
-function calculateDistance(lat1, lng1, lat2, lng2) {
-    const rad = Math.PI / 180;
-    const dLat = (lat2 - lat1) * rad;
-    const dLng = (lng2 - lng1) * rad;
-    const a = Math.sin(dLat / 2) ** 2 +
-              Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
-              Math.sin(dLng / 2) ** 2;
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const distance = 6371 * c; // 지구의 반지름 (킬로미터)
-    return distance;
-}
+// `Add Day` 버튼 클릭 이벤트 추가
+document.getElementById('addDayBtn').addEventListener('click', addDay);
+
+// 초기적으로 첫 번째 날짜 폼을 추가
+addDay();
