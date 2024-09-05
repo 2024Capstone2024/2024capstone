@@ -56,6 +56,17 @@ function getLatLngFromPlace(placeName) {
     });
 }
 
+async function setPlace(pointType) {
+    const placeName = document.getElementById(pointType === 'startPoint' ? 'startPlace' : (pointType === 'endPoint' ? 'endPlace' : 'waypointPlace')).value;
+    try {
+        const { lat, lng } = await getLatLngFromPlace(placeName);
+        setPoint(lat, lng, pointType);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+
 // 장소를 설정하는 함수
 async function getCarDirection() {
     if (!pointObj.startPoint.lat || !pointObj.endPoint.lat) {
