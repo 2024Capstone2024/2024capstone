@@ -57,17 +57,6 @@ function getLatLngFromPlace(placeName) {
 }
 
 // 장소를 설정하는 함수
-async function setPlace(pointType) {
-    const placeName = document.getElementById(pointType === 'startPoint' ? 'startPlace' : (pointType === 'endPoint' ? 'endPlace' : 'waypointPlace')).value;
-    try {
-        const { lat, lng } = await getLatLngFromPlace(placeName);
-        setPoint(lat, lng, pointType);
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-// 카카오 API로 경로를 구하는 함수
 async function getCarDirection() {
     if (!pointObj.startPoint.lat || !pointObj.endPoint.lat) {
         console.error('출발지 또는 목적지가 설정되지 않았습니다.');
@@ -76,15 +65,24 @@ async function getCarDirection() {
 
     try {
         // 백엔드로 요청 보내기
-        const response = await fetch('https://www.2024capstoneaiplanner.site/api/getCarDirection', {
+        const response = await fetch('/api/getCarDirection', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                startPoint: pointObj.startPoint,
-                endPoint: pointObj.endPoint,
-                waypoints: pointObj.waypoints
+                startPoint: {
+                    lat: pointObj.startPoint.lat,
+                    lng: pointObj.startPoint.lng
+                },
+                endPoint: {
+                    lat: pointObj.endPoint.lat,
+                    lng: pointObj.endPoint.lng
+                },
+                waypoints: pointObj.waypoints.map(point => ({
+                    lat: point.lat,
+                    lng: point.lng
+                }))
             })
         });
 
@@ -119,6 +117,7 @@ async function getCarDirection() {
         console.error('Error:', error);
     }
 }
+
 
 
 // 장소 간 거리를 계산하는 함수
