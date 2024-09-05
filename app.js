@@ -127,7 +127,7 @@ async function getCarDirection(dayIndex) {
 }
 
 // 날짜 추가 함수
-function addDay() {
+function Day() {
     const daySections = document.getElementById('daySections');
     const dayIndex = daySections.children.length;
 
@@ -171,7 +171,7 @@ function showRouteForDay(dayIndex, isChecked) {
 }
 
 // `Add Day` 버튼 클릭 이벤트 추가
-document.getElementById('addDayBtn').addEventListener('click', addDay);
+document.getElementById('addDayBtn').addEventListener('click', Day);
 
 // 초기적으로 첫 번째 날짜 폼을 추가
-addDay();
+Day();
