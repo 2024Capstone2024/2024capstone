@@ -1,4 +1,3 @@
-let map;
 let pointObj = {
     startPoint: { marker: null, lat: null, lng: null },
     endPoint: { marker: null, lat: null, lng: null },
