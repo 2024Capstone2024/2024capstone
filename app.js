@@ -76,7 +76,7 @@ async function getCarDirection() {
 
     try {
         // 백엔드로 요청 보내기
-        const response = await fetch('/api/getCarDirection', {
+        const response = await fetch('https://www.2024capstoneaiplanner.site/api/getCarDirection', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
