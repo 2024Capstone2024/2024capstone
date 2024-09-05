@@ -60,26 +60,50 @@ function getLatLngFromPlace(placeName) {
     });
 }
 
-async function setPlace(pointType) {
-    const placeName = document.getElementById(pointType === 'startPoint' ? 'startPlace' : (pointType === 'endPoint' ? 'endPlace' : 'waypointPlace')).value;
-    try {
-        const { lat, lng } = await getLatLngFromPlace(placeName);
-        setPoint(lat, lng, pointType);
-    } catch (error) {
+// 날자별 출발지, 도착지, 경유지 저장 객체
+let dayPoints = {};
+
+function setPlace(pointType, day) {
+    const placeName = document.getElementById(`${pointType === 'startPoint' ? 'startPlace' : (pointType === 'endPoint' ? 'endPlace' : 'waypointPlace') + day}`).value;
+    getLatLngFromPlace(placeName).then(({ lat, lng }) => {
+        if (!dayPoints[day]) dayPoints[day] = { startPoint: {}, endPoint: {}, waypoints: [] };
+        setPoint(lat, lng, pointType, day);
+    }).catch(error => {
         console.error('Error:', error);
-    }
+    });
 }
 
+function setPoint(lat, lng, pointType, day) {
+    setCenter(lat, lng);
+    let marker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(lat, lng)
+    });
 
-// 장소를 설정하는 함수
-async function getCarDirection() {
-    if (!pointObj.startPoint.lat || !pointObj.endPoint.lat) {
+    if (pointType === 'waypoint') {
+        if (dayPoints[day].waypoints.length >= 5) dayPoints[day].waypoints.shift(); // 최대 5개 경유지 유지
+        dayPoints[day].waypoints.push({ marker, lat, lng });
+    } else {
+        if (dayPoints[day][pointType].marker !== null) {
+            dayPoints[day][pointType].marker.setMap(null);
+        }
+        dayPoints[day][pointType] = { marker, lat, lng };
+    }
+    marker.setMap(map);
+}
+
+document.getElementById('showRouteBtn').addEventListener('click', () => {
+    // 예를 들어, Day 1의 경로를 가져오는 함수 호출
+    const day = 1;
+    getCarDirection(day);
+});
+
+async function getCarDirection(day) {
+    if (!dayPoints[day] || !dayPoints[day].startPoint.lat || !dayPoints[day].endPoint.lat) {
         console.error('출발지 또는 목적지가 설정되지 않았습니다.');
         return;
     }
 
     try {
-        // 백엔드로 요청 보내기
         const response = await fetch('https://www.2024capstoneaiplanner.site/api/getCarDirection', {
             method: 'POST',
             headers: {
@@ -87,14 +111,14 @@ async function getCarDirection() {
             },
             body: JSON.stringify({
                 startPoint: {
-                    lat: pointObj.startPoint.lat,
-                    lng: pointObj.startPoint.lng
+                    lat: dayPoints[day].startPoint.lat,
+                    lng: dayPoints[day].startPoint.lng
                 },
                 endPoint: {
-                    lat: pointObj.endPoint.lat,
-                    lng: pointObj.endPoint.lng
+                    lat: dayPoints[day].endPoint.lat,
+                    lng: dayPoints[day].endPoint.lng
                 },
-                waypoints: pointObj.waypoints.map(point => ({
+                waypoints: dayPoints[day].waypoints.map(point => ({
                     lat: point.lat,
                     lng: point.lng
                 }))
@@ -107,7 +131,7 @@ async function getCarDirection() {
 
         const data = await response.json();
 
-        // 받아온 경로 데이터를 지도에 표시
+        // 경로 데이터를 지도에 표시
         const linePath = [];
         data.routes[0].sections.forEach(section => {
             section.roads.forEach(road => {
@@ -132,6 +156,7 @@ async function getCarDirection() {
         console.error('Error:', error);
     }
 }
+
 
 
 
