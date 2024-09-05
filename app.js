@@ -6,13 +6,18 @@ let pointObj = {
 };
 
 window.onload = function () {
-    // 지도 초기화
-    const mapContainer = document.getElementById('map');
-    const mapOptions = {
-        center: new kakao.maps.LatLng(33.452613, 126.570888),
-        level: 3
-    };
-    map = new kakao.maps.Map(mapContainer, mapOptions);
+    // 카카오맵 API 로드 후 초기화
+    const kakao = window.kakao;
+    kakao.maps.load(() => {
+        const mapContainer = document.getElementById('map'); // 지도를 표시할 div
+        const mapOption = {
+            center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도 초기 중심 좌표 (서울)
+            level: 7 // 지도 확대 레벨
+        };
+
+        // 지도 객체 생성
+        map = new kakao.maps.Map(mapContainer, mapOption);
+    });
 };
 
 // 지도 중심을 이동시키는 함수
