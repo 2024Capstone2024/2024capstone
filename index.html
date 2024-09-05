@@ -31,14 +31,10 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
      
-   
     <!-- 네이버 지도 API 스크립트 추가 -->
-
     <title>테스트용</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=59ebfcad3f66c80075841a35e3f8da57&libraries=services"></script>
-    
-
     
     <style>
         #map {
@@ -68,19 +64,39 @@
             height: 400px;
             margin-bottom: 20px;
         }
-        #map3 { width: 100%; height: 350px; margin-bottom: 40px; }
-        #placesList { margin: 10px 0; padding: 0; list-style: none; }
-        #placesList li { margin: 5px 0; padding: 5px; border: 1px solid #ddd; cursor: pointer; }
-        #placesList1 { margin: 10px 0; padding: 0; list-style: none; }
-        #placesList1 li { padding: 5px; cursor: pointer; }
-        
-
+        #map3 {
+            width: 100%;
+            height: 350px;
+            margin-bottom: 20px; /* 'map4' 위의 여백을 조정하기 위해 추가 */
+        }
+        #placesList {
+            margin: 10px 0;
+            padding: 0;
+            list-style: none;
+        }
+        #placesList li {
+            margin: 5px 0;
+            padding: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        #placesList1 {
+            margin: 10px 0;
+            padding: 0;
+            list-style: none;
+        }
+        #placesList1 li {
+            padding: 5px;
+            cursor: pointer;
+        }
         #map4 {
-    width: 100%;
-    height: 500px;
-    margin-top: 20px; /* 위 여백을 추가하여 요소 사이에 간격을 둡니다. */
-}
-        
+            width: 100%;
+            height: 500px;
+            margin-bottom: 20px; /* 'map4' 아래에 여백을 추가하여 'map3'과의 간격을 유지 */
+        }
+        .controls {
+            margin-top: 10px;
+        }
     </style>
 </head>
 
@@ -94,8 +110,6 @@
     <!-- Spinner End -->
 
     <!-- 맵을 표시할 div 추가 -->
-    
-
     <div>
         <div id="map" style="width:100%;height:400px;"></div>
         <input type="text" id="keyword" placeholder="장소 검색어 입력">
@@ -103,8 +117,6 @@
         <ul id="results"></ul>
     </div>
     <script src="searchroutes.js" defer></script>
-    <div id="map"></div>
-
 
     <!-- 경로띄우기 -->
     <div id="map1"></div>
@@ -120,7 +132,7 @@
     <ul id="placeList"></ul>
 
     <script src="drawline.js" defer></script>
-    
+
     <!-- 목록 띄우기 -->
     <h1>Kakao Map Place Search and List</h1>
     <div>
@@ -131,9 +143,9 @@
     <div id="map3"></div>
     <script src="placelist.js"></script>
 
-     <!-- 실제경로  -->
+    <!-- 실제경로  -->
     <div id="map4"></div>
-    
+
     <!-- 지도 제어를 위한 입력 폼과 버튼들 -->
     <div class="controls">
         <h4>출발지</h4>
@@ -158,9 +170,7 @@
         <h4>장소 간 거리</h4>
         <ul id="distanceList"></ul>
     </div>
-
-    <!-- 카카오 맵 API 로드 -->
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_APP_KEY"></script>
+    
     <!-- 사용자 정의 JavaScript 파일 로드 -->
     <script src="app.js"></script>
 
