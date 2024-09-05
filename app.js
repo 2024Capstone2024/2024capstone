@@ -143,10 +143,23 @@ async function getCarDirection(dayIndex) {
 }
 
 // 체크박스 선택에 따라 경로 표시 제어
+// 체크박스 선택에 따라 경로와 마커 표시 제어
 function showRouteForDay(dayIndex, isChecked) {
     if (isChecked) {
+        // 경로 표시
         if (polylines[dayIndex]) {
             polylines[dayIndex].setMap(map); // Polyline을 지도에 추가
+
+            // 출발지, 도착지, 경유지 마커 표시
+            if (dayData[dayIndex].startPoint) {
+                dayData[dayIndex].startPoint.marker.setMap(map);
+            }
+            if (dayData[dayIndex].endPoint) {
+                dayData[dayIndex].endPoint.marker.setMap(map);
+            }
+            dayData[dayIndex].waypoints.forEach(waypoint => {
+                waypoint.marker.setMap(map);
+            });
 
             // 지도 중심을 출발지로 이동
             const startLatLng = new kakao.maps.LatLng(dayData[dayIndex].startPoint.lat, dayData[dayIndex].startPoint.lng);
@@ -155,12 +168,24 @@ function showRouteForDay(dayIndex, isChecked) {
             getCarDirection(dayIndex); // Polyline이 없으면 경로를 새로 가져옴
         }
     } else {
-        // Polyline을 지도에서 제거
+        // 경로 숨김
         if (polylines[dayIndex]) {
             polylines[dayIndex].setMap(null);
         }
+
+        // 출발지, 도착지, 경유지 마커 숨김
+        if (dayData[dayIndex].startPoint) {
+            dayData[dayIndex].startPoint.marker.setMap(null);
+        }
+        if (dayData[dayIndex].endPoint) {
+            dayData[dayIndex].endPoint.marker.setMap(null);
+        }
+        dayData[dayIndex].waypoints.forEach(waypoint => {
+            waypoint.marker.setMap(null);
+        });
     }
 }
+
 
 // 날짜 추가 함수
 function Day() {
