@@ -69,36 +69,23 @@ async function setPlace(pointType) {
 
 // 카카오 API로 경로를 구하는 함수
 async function getCarDirection() {
-    const REST_API_KEY = 'YOUR_REST_API_KEY';
-    const url = 'https://apis-navi.kakaomobility.com/v1/directions';
-
     if (!pointObj.startPoint.lat || !pointObj.endPoint.lat) {
         console.error('출발지 또는 목적지가 설정되지 않았습니다.');
         return;
     }
 
-    const origin = `${pointObj.startPoint.lng},${pointObj.startPoint.lat}`;
-    const destination = `${pointObj.endPoint.lng},${pointObj.endPoint.lat}`;
-    const waypoints = pointObj.waypoints.map(point => `${point.lng},${point.lat}`).join('|');
-
-    const headers = {
-        Authorization: `KakaoAK ${REST_API_KEY}`,
-        'Content-Type': 'application/json'
-    };
-
-    const queryParams = new URLSearchParams({
-        origin: origin,
-        destination: destination,
-        waypoints: waypoints,
-        priority: 'DISTANCE' // 경로 우선순위를 최단 거리로 설정
-    });
-
-    const requestUrl = `${url}?${queryParams}`;
-
     try {
-        const response = await fetch(requestUrl, {
-            method: 'GET',
-            headers: headers
+        // 백엔드로 요청 보내기
+        const response = await fetch('/api/getCarDirection', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                startPoint: pointObj.startPoint,
+                endPoint: pointObj.endPoint,
+                waypoints: pointObj.waypoints
+            })
         });
 
         if (!response.ok) {
@@ -107,6 +94,7 @@ async function getCarDirection() {
 
         const data = await response.json();
 
+        // 받아온 경로 데이터를 지도에 표시
         const linePath = [];
         data.routes[0].sections.forEach(section => {
             section.roads.forEach(road => {
@@ -131,6 +119,7 @@ async function getCarDirection() {
         console.error('Error:', error);
     }
 }
+
 
 // 장소 간 거리를 계산하는 함수
 function calculateDistances() {
