@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateControlPanel() {
-      const controlPanel = document.getElementById('controlPanel');
+      const controlPanel = document.getElementById('controlPanel1');
       controlPanel.innerHTML = '';
 
       dayPlaces.forEach((_, dayIndex) => {

@@ -31,10 +31,14 @@
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
      
+   
     <!-- 네이버 지도 API 스크립트 추가 -->
+
     <title>테스트용</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=59ebfcad3f66c80075841a35e3f8da57&libraries=services"></script>
+    
+
     
     <style>
         #map {
@@ -48,6 +52,9 @@
             margin-bottom: 20px;
         }
         #controlPanel {
+            margin-top: 10px;
+        }
+        #controlPanel1 {
             margin-top: 10px;
         }
         label {
@@ -64,39 +71,11 @@
             height: 400px;
             margin-bottom: 20px;
         }
-        #map3 {
-            width: 100%;
-            height: 350px;
-            margin-bottom: 20px; /* 'map4' 위의 여백을 조정하기 위해 추가 */
-        }
-        #placesList {
-            margin: 10px 0;
-            padding: 0;
-            list-style: none;
-        }
-        #placesList li {
-            margin: 5px 0;
-            padding: 5px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-        }
-        #placesList1 {
-            margin: 10px 0;
-            padding: 0;
-            list-style: none;
-        }
-        #placesList1 li {
-            padding: 5px;
-            cursor: pointer;
-        }
-        #map4 {
-            width: 100%;
-            height: 500px;
-            margin-bottom: 20px; /* 'map4' 아래에 여백을 추가하여 'map3'과의 간격을 유지 */
-        }
-        .controls {
-            margin-top: 10px;
-        }
+        #map3 { width: 100%; height: 350px; }
+        #placesList { margin: 10px 0; padding: 0; list-style: none; }
+        #placesList li { margin: 5px 0; padding: 5px; border: 1px solid #ddd; cursor: pointer; }
+        #placesList1 { margin: 10px 0; padding: 0; list-style: none; }
+        #placesList1 li { padding: 5px; cursor: pointer; }
     </style>
 </head>
 
@@ -110,44 +89,38 @@
     <!-- Spinner End -->
 
     <!-- 맵을 표시할 div 추가 -->
-    <div>
-        <div id="map" style="width:100%;height:400px;"></div>
-        <input type="text" id="keyword" placeholder="장소 검색어 입력">
-        <button onclick="searchPlaces()">Search</button>
-        <ul id="results"></ul>
-    </div>
-    <script src="searchroutes.js" defer></script>
+    
+
+    <input type="text" id="travelInput" placeholder="사용자의 정보및 여행테마 입력하기">
+    <button id="submitTravelRequestBtn">제출하기</button>
+
+    <div id="map"></div>
+    <div id="controlPanel"></div>
+    <script src="sendtext.js"></script>
+
+
+
 
     <!-- 경로띄우기 -->
     <div id="map1"></div>
-    <div id="controlPanel">
-        <!-- 체크박스와 라벨이 여기에 동적으로 추가됩니다. -->
-    </div>
+    <div id="controlPanel1"></div>
 
-        <!-- 목록 띄우기 -->
-    <h1>Kakao Map Place Search and List</h1>
+    <div id="daySections"></div>
+    <button id="addDayBtn">일수 추가하기</button>
+    <button id="submitPlacesBtn">장소제출</button>
+    <ul id="placeList"></ul>
+
+    <script src="drawline.js" defer></script>
+    
+    <!-- 목록 띄우기 -->
+    <h1>목록띄우기</h1>
     <div>
-        <input type="text" id="keyword1" placeholder="Search for places">
+        <input type="text" id="keyword1" placeholder="장소 연관 검색해보기">
         <button id="listsearchBtn">Search</button>
     </div>
     <ul id="placesList1"></ul>
     <div id="map3"></div>
     <script src="placelist.js"></script>
-
-    <!-- 실제 경로 -->
-    <div id="map4"></div>
-
-    <!-- 날짜 추가 및 체크박스를 위한 컨트롤 -->
-    <div class="controls">
-        <button id="addDayBtn">Add Day</button>
-        <div id="checkboxContainer"></div>
-    </div>
-
-    <!-- 날짜별 입력 폼을 추가할 컨테이너 -->
-    <div id="daySections"></div>
-
-    <!-- 사용자 정의 JavaScript 파일 로드 -->
-    <script src="app.js"></script>
 
     <!-- Topbar Start -->
     <div class="container-fluid bg-dark px-5 d-none d-lg-block">
