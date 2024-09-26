@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
   
       function fetchPlaces(travelText) {
-        fetch('/api/rag', {
+        fetch('https://www.2024capstoneaiplanner.site/api/rag', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
