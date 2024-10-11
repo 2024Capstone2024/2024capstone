@@ -1,0 +1,58 @@
+<!-- Spinner End -->
+
+    <!-- 맵을 표시할 div 추가 -->
+    
+
+    <!-- <input type="text" id="travelInput" placeholder="사용자의 정보및 여행테마 입력하기">
+    <button id="submitTravelRequestBtn">제출하기</button>
+
+    <div id="map"></div>
+    <div id="controlPanel"></div>
+    <script src="sendtext.js"></script> -->
+
+
+
+
+    <!-- 경로띄우기 -->
+    <!-- <div id="map1"></div>
+    <div id="controlPanel1"></div>
+
+    <div id="daySections"></div>
+    <button id="addDayBtn">일수 추가하기</button>
+    <button id="submitPlacesBtn">장소제출</button>
+    <ul id="placeList"></ul>
+
+    <script src="drawline.js" defer></script> -->
+    
+    <!-- 목록 띄우기 -->
+    <!-- <h1>목록띄우기</h1>
+    <div>
+        <input type="text" id="keyword1" placeholder="장소 연관 검색해보기">
+        <button id="listsearchBtn">Search</button>
+    </div>
+    <ul id="placesList1"></ul>
+    <div id="map3"></div>
+    <script src="placelist.js"></script> -->
+
+    <!-- Topbar Start -->
+    <!-- <div class="container-fluid bg-dark px-5 d-none d-lg-block">
+        <div class="row gx-0">
+            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>서울특별시 노원구 공릉로 232 서울과학기술대학교 미래관</small>
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i>010 0000 0000</small>
+                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i>service@seoultech.ac.kr</small>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-twitter fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-facebook-f fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-linkedin-in fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href=""><i class="fab fa-instagram fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle" href=""><i class="fab fa-youtube fw-normal"></i></a>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Topbar End -->
