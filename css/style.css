@@ -78,26 +78,42 @@
 
 
 /*** Navbar ***/
+.navbar-light {
+    position: fixed; /* 기본적으로 고정 */
+    width: 100%;
+    top: 0;
+    left: 0;
+    border-bottom: 1px solid rgba(256, 256, 256, .1);
+    z-index: 999;
+    background: #FFFFFF; /* 배경색 추가 */
+}
+
 .navbar-light .navbar-nav .nav-link {
     font-family: 'Nunito', sans-serif;
     position: relative;
     margin-right: 25px;
     padding: 35px 0;
-    color: #FFFFFF !important;
+    color: #FFFFFF !important; /* 기본 글씨 색상 */
     font-size: 18px;
     font-weight: 600;
     outline: none;
     transition: .5s;
+    opacity: 0.5; /* 기본적으로 반투명하게 설정 */
 }
 
-.sticky-top.navbar-light .navbar-nav .nav-link {
-    padding: 20px 0;
-    color: var(--dark) !important;
-}
-
-.navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
-    color: var(--primary) !important;
+    opacity: 1; /* 현재 페이지일 때는 불투명하게 설정 */
+    color: var(--primary) !important; /* 현재 페이지 색상 */
+}
+
+.navbar-light .navbar-nav .nav-link:hover {
+    opacity: 1; /* 마우스를 올릴 때 불투명하게 설정 */
+}
+
+.navbar-light .navbar-nav .nav-link:not(.active) {
+    color: var(--primary) !important; /* 비활성화된 링크는 투명하게 설정 */
+}
+
 }
 
 .navbar-light .navbar-brand img {
@@ -110,11 +126,6 @@
 }
 
 @media (max-width: 991.98px) {
-    .sticky-top.navbar-light {
-        position: relative;
-        background: #FFFFFF;
-    }
-
     .navbar-light .navbar-collapse {
         margin-top: 15px;
         border-top: 1px solid #DDDDDD;
@@ -133,20 +144,6 @@
 }
 
 @media (min-width: 992px) {
-    .navbar-light {
-        position: absolute;
-        width: 100%;
-        top: 0;
-        left: 0;
-        border-bottom: 1px solid rgba(256, 256, 256, .1);
-        z-index: 999;
-    }
-    
-    .sticky-top.navbar-light {
-        position: fixed;
-        background: #FFFFFF;
-    }
-
     .navbar-light .navbar-nav .nav-link::before {
         position: absolute;
         content: "";
@@ -168,6 +165,7 @@
         display: none;
     }
 }
+
 
 
 /*** Hero Header ***/
@@ -441,3 +439,19 @@
     padding-right: 0;
     border-right: none;
 }
+
+/* 카드 전체에 확대 효과 */
+.card {
+    transition: transform 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.card:hover {
+    transform: scale(1.05); /* 카드 전체 확대 */
+    cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+}
+
+.container {
+    display: flex;
+    flex-direction: column; /* 또는 row */
+}
+
