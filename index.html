@@ -18,14 +18,40 @@
     <link href="css/style.css" rel="stylesheet">
 
     <style>
-        
         #map {
             width: 50%;
             height: 400px;
+            margin-left: 50px;
             margin-top: 200px; /* 네비게이션 바 높이에 따라 조정 */
             margin-bottom: 20px;
         }
+        .question-box,
+        .answer-box {
+            border: 1px solid #ddd; /* 박스 테두리 */
+            border-radius: 5px; /* 둥근 모서리 */
+            padding: 15px; /* 안쪽 여백 */
+            background-color: #f9f9f9; /* 배경색 */
+        }
+    
+        .question-box {
+            margin-top: 220px; /* 질문 박스의 상단 여백 */
+        }
+        .answer-box {
+            margin-top: 20px; /* 답변 박스의 상단 여백 */
+        }
+    
+        #questionInput {
+            resize: none; /* 크기 조절 비활성화 */
+            height: 100px; /* 질문 입력 박스 높이 */
+        }
+    
+        #answerOutput {
+            max-height: 150px; /* 답변 박스 최대 높이 */
+            overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
+        }
     </style>
+    
+    
 
     <!-- Kakao Maps API -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -61,9 +87,26 @@
     </div>
     <!-- Navbar End -->
 
-    <!-- Map Section -->
-    <div id="map"></div>
-    <div id="controlPanel"></div>
+     <!-- Main Content Start -->
+     <div class="container-fluid">
+        <div class="row">
+            <!-- Map Section -->
+            <div id="map" class="col-md-8" style="height: 400px;"></div>
+            <!-- Question and Answer Section -->
+            <div class="col-md-4">
+                <div class="question-box">
+                    <h5>질문하기</h5>
+                    <textarea id="questionInput" rows="4" style="width: 100%;"></textarea>
+                    <button id="submitQuestion" class="btn btn-primary mt-2">질문 제출</button>
+                </div>
+                <div class="answer-box mt-3">
+                    <h5>답변</h5>
+                    <div id="answerOutput" style="border: 1px solid #ddd; padding: 10px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content End -->
     <script src="sendtext.js"></script>
 </body>
 </html>
