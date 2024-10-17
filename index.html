@@ -50,6 +50,26 @@
             max-height: 150px; /* 답변 박스 최대 높이 */
             overflow-y: auto; /* 내용이 넘칠 경우 스크롤 */
         }
+
+        #map3 {
+            width: 50%;
+            height: 400px;
+            margin-left: 50px;
+            margin-top: 200px;
+        }
+
+        #placesList1 {
+            list-style-type: none;
+            padding: 0;
+            max-height: 400px;
+            overflow-y: scroll;
+        }
+
+        #placesList1 li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
     </style>
     
     
@@ -114,10 +134,30 @@
             </div>
         </div>
     </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Map Section -->
+            <div id="map3" class="col-md-8"></div>
+
+            <!-- Place List and Search Section -->
+            <div class="col-md-4">
+                <div class="question-box">
+                    <h5>장소 검색</h5>
+                    <div class="input-group mb-3">
+                        <input type="text" id="keyword1" class="form-control" placeholder="검색어를 입력하세요...">
+                        <button class="btn btn-primary" id="listsearchBtn">검색</button>
+                    </div>
+                    <ul id="placesList1"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Main Content End -->
     <div id="controlPanel"></div>
     <script src="sendtext.js"></script>
+    <script src="placelist.js"></script>
 </body>
 </html>
 
