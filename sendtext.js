@@ -132,27 +132,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function fetchPlaces(travelText) {
-      fetch('https://www.2024capstoneaiplanner.site/api/rag', {
+      return fetch('https://www.2024capstoneaiplanner.site/api/rag', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({ userRequest: travelText })
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.sortedPlaces && data.sortedPlaces.length > 0) {
-          dayPlaces = data.sortedPlaces;
-          updateControlPanel();
-        } else {
-          alert('No places found');
-        }
-      })
-      .catch(error => {
-        console.error('Error fetching places:', error);
-        alert('장소를 가져오는 데 실패했습니다. 다시 시도해 주세요.');
-      });
+        .then(response => response.json())
+        .then(data => {
+          if (data.sortedPlaces && data.sortedPlaces.length > 0) {
+            dayPlaces = data.sortedPlaces;
+            updateControlPanel();
+          } else {
+            alert('No places found');
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching places:', error);
+          alert('장소를 가져오는 데 실패했습니다. 다시 시도해 주세요.');
+        });
     }
+    
 
     document.getElementById('submitTravelRequestBtn').addEventListener('click', function() {
       const travelInput = document.getElementById('travelInput');
